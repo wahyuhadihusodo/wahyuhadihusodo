@@ -1,0 +1,129 @@
+def menu ():
+    import os
+    os.system ("CLS")
+    print("\t\tSELAMAT DATANG DI PERPUSTAKAAN DIGITAL ITTS")
+    print("\nBerikut adalah daftar menu yang bisa anda gunakan untuk mengakses program :\n")
+    print("1. Melihat daftar buku perpustakaan")
+    print("2. Menambah daftar buku perpustakaan")
+    print("3. Mencari buku di perpustakaan")
+    print("4. Mengupdate daftar buku di perpustakaan")
+    print("5. Menghapus data buku di perpustakaan")
+    print("6. Keluar dari program")
+
+    p = int(input("\nMasukkan kode menu yang ingin anda akses : "))
+    pilihmenu (p)
+
+def pilihmenu(p):
+    if p==1:
+        lihatdata()
+    elif p==2:
+        tambahdata()
+    elif p==3:
+        caridata()
+    elif p==4:
+        updatedata()
+    elif p==5:
+        hapusdata()
+    elif p==6:
+        print("program akan keluar")
+    else:
+        print("Kode input tidak valid")
+
+def lihatdata():
+    print("\nBerikut adalah buku-buku yang tersedia di perpustakaan :\n")
+    f = open("data.txt")
+    isi = f.readlines()
+    isi.sort()
+    if len(isi)==0:
+        print("Data masih kosong")
+    else:
+        i=0;
+        for x in isi:
+            nama=x.split(",")
+            i=str(i)
+            print("| "+i,end="")
+            print(" "*(5-2-len(str(i))),end="")
+            for y in nama:
+                y1=y.strip()
+                print("| "+y1,end="")
+                print(" "*(35-2-len(y1)),end="")
+            i=int(i)+1
+            print("|")
+    print("\n\n\nSilahkan tekan ENTER untuk kembali ke menu sebelumnya")
+    f.close()
+    input()
+    menu()
+
+def tambahdata():
+    print("\nAnda berada pada menu untuk menambah data pada daftar buku")
+    print("\nSilahkan masukkan data baru\n")
+    nama=input("nama buku      : ")
+    jenis=input("jenis buku    : ")
+    tahun=input("tahun terbit  : ")
+    f=open("data.txt","a")
+    f.writelines(["\n"+nama+","+jenis+","+tahun])
+    print("\nSilahkan tekan ENTER untuk melanjutkan")
+    f.close()
+    input()
+    menu()
+
+def caridata():
+    print("\nAnda berada pada menu untuk mencari data pada daftar buku")
+    cari=input("\nMasukkan nama buku yang ingin anda cari : ")
+    f=open("data.txt","r")
+    isi=f.readlines()
+    isi.sort()
+
+    idx=1
+    for x in isi:
+        xp = x.split(",")
+        if xp[0] == cari:
+            print("\n"+xp[0]+" - "+xp[1]+" - "+xp[2],end=" ")
+        idx +=1
+
+    print("\nSilahkan tekan ENTER untuk melanjutkan")
+    f.close()
+    input()
+    menu()
+
+def updatedata():
+    print("\nUpdate data")
+    baru=input("Masukkan nama buku yang ingin di perbarui : ")
+    print("Masukkan data baru")
+    nb=input("nama buku     : ")
+    jb=input("jenis buku    : ")
+    tb=input("tahun terbit  : ")
+
+    f=open("data.txt")
+    isi=f.readlines()
+    idx=0
+    for x in isi:
+        xp=x.split(",")
+        if xp[0]==baru:
+            xp[0] = nb
+            xp[1] = jb
+            xp[2] = tb+"\n"
+            xg=",".join(xp)
+            isi[idx]=xg
+        idx +=1
+
+    f=open("data.txt","w")
+    isi=f.writelines(isi)
+    print("\nSilahkan cetak ENTER untuk melanjutkan")
+    f.close()
+    input()
+    menu()
+
+def hapusdata():
+    f=open("data.txt")
+    output=[]
+    str=input("Masukkan nama buku yang ingin dihapus : ")
+    for fn in f:
+        if not fn.startswith(str):
+            output.append(fn)
+
+    f=open("data.txt","w")
+    f.writelines(output)
+    f.close()
+    menu()
+menu()
